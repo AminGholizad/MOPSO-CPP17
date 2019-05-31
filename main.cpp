@@ -32,5 +32,6 @@ int main(){
   auto [rep,swarm] = mopso::mopso<Nvars,Nobjs,Swarm_size,Rep_size>(l,u,cost_fcn<Nvars,Nobjs>,max_iter);
   std::ofstream f("./resualt.csv");
   rep.csv_out(f);
+  rep.SelectLeader().info();
   return 0;
 }
