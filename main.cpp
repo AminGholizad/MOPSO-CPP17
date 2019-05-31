@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "mopso.hpp"
 #include <cmath>
 const double pi = 3.1415926535897932385;
@@ -29,7 +30,7 @@ int main(){
   mopso::vars<Nvars> l{0,0,0,0};
   mopso::vars<Nvars> u{pi/2,pi/2,pi/2,pi/2};
   auto [rep,swarm] = mopso::mopso<Nvars,Nobjs,Swarm_size,Rep_size>(l,u,cost_fcn<Nvars,Nobjs>,max_iter);
-  //rep.info();
-  rep.SelectLeader().info();
+  std::ofstream f("./resualt.csv");
+  rep.csv_out(f);
   return 0;
 }
