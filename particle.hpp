@@ -95,6 +95,31 @@ namespace mopso {
         else out << "is dominated:no" << '\n';
         out << "grid index:" << grid_index << '\n';
       }
+      inline void csv_out(std::ostream& out,bool header=true) const&{
+        if (header) out<< "x,cost,infeasablity,pBest,pBest_cost,pBest_infeasablity,is_dominated,grid_index\n";
+        out << '"';
+        for (size_t i = 0; i < N-1; i++) out << x[i] << ',';
+        out << x.back() << "\",\"";
+        for (size_t i = 0; i < O-1; i++) out << cost[i] << ',';
+        out << cost.back() << "\",";
+        out << infeasablity << ",\"";
+        for (size_t i = 0; i < N-1; i++)
+          out << pBest[i] << ',';
+        out << pBest.back() << "\",\"";
+        for (size_t i = 0; i < O-1; i++)
+          out << pBest_cost[i] << ",";
+        out << pBest_cost.back() << "\",";
+        out << pBest_infeasablity << ',';
+        if (is_dominated) out << "yes,";
+        else out << "no,";
+        out << grid_index << '\n';
+      }
+      template<typename T,template <typename, typename = std::allocator<T>> class Container>
+      inline static void csv_out(std::ostream& out,Container<T>& swarm){
+        swarm[0].csv_out(out,true);
+        for (size_t i = 1; i < swarm.size(); i++)
+          swarm[i].csv_out(out,false);
+      }
       inline void update_grid_index(const GRD<O>& g){
         ull nGrid = g[0].size();
         ull GridSubIndex=0;
