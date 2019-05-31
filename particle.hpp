@@ -25,22 +25,22 @@ namespace mopso {
           x[i]=rnd::unifrnd(l[i],u[i]);
           v[i]=0.;
         }
-        std::tie(cost,infeasablity)=problem(x);
+        std::tie(cost,infeasiblity)=problem(x);
         pBest=x;
         pBest_cost=cost;
-        pBest_infeasablity=infeasablity;
+        pBest_infeasiblity=infeasiblity;
         is_dominated=false;
       }
       inline void update(const Particle& gBest,const Problem<N,O>& problem,const double w=0.5,const std::array<double,2>& c={0.2,0.2},const double pm=0.1){
         updateV(gBest,w,c);
         updateX();
-        std::tie(cost,infeasablity) = problem(x);
+        std::tie(cost,infeasiblity) = problem(x);
         Mutate(problem,pm);
         updatePBest();
       }
       inline bool dominates(const Particle& b)const&{
-        if (infeasablity<b.infeasablity) return true;
-        if (infeasablity>b.infeasablity) return false;
+        if (infeasiblity<b.infeasiblity) return true;
+        if (infeasiblity>b.infeasiblity) return false;
         bool f = false;
         for (size_t i = 0; i < O; i++){
           if (cost[i]>b.cost[i]) return false;
@@ -74,7 +74,7 @@ namespace mopso {
         for (size_t i = 0; i < O-1; i++)
           out << cost[i] << ", ";
         out << cost.back() << ")\n";
-        out << "\tinfeasablity = " << infeasablity << '\n';
+        out << "\tinfeasiblity = " << infeasiblity << '\n';
         out << "\tx=(";
         for (size_t i = 0; i < N-1; i++)
           out << x[i] << ", ";
@@ -88,7 +88,7 @@ namespace mopso {
         for (size_t i = 0; i < O-1; i++)
           out << pBest_cost[i] << ", ";
         out << pBest_cost.back() << ")\n";
-        out << "\t\tinfeasablity = " << pBest_infeasablity << '\n';
+        out << "\t\tinfeasiblity = " << pBest_infeasiblity << '\n';
         out << "\t\tx=(";
         for (size_t i = 0; i < N-1; i++)
           out << pBest[i] << ", ";
@@ -98,20 +98,20 @@ namespace mopso {
         out << "grid index:" << grid_index << '\n';
       }
       inline void csv_out(std::ostream& out,bool header=true) const&{
-        if (header) out<< "x,cost,infeasablity,pBest,pBest_cost,pBest_infeasablity,is_dominated,grid_index\n";
+        if (header) out<< "x,cost,infeasiblity,pBest,pBest_cost,pBest_infeasiblity,is_dominated,grid_index\n";
         out << '"';
         for (size_t i = 0; i < N-1; i++) out << x[i] << ',';
         out << x.back() << "\",\"";
         for (size_t i = 0; i < O-1; i++) out << cost[i] << ',';
         out << cost.back() << "\",";
-        out << infeasablity << ",\"";
+        out << infeasiblity << ",\"";
         for (size_t i = 0; i < N-1; i++)
           out << pBest[i] << ',';
         out << pBest.back() << "\",\"";
         for (size_t i = 0; i < O-1; i++)
           out << pBest_cost[i] << ",";
         out << pBest_cost.back() << "\",";
-        out << pBest_infeasablity << ',';
+        out << pBest_infeasiblity << ',';
         if (is_dominated) out << "yes,";
         else out << "no,";
         out << grid_index << '\n';
@@ -171,11 +171,11 @@ namespace mopso {
         }
       }
       inline void updatePBest(){
-        if (infeasablity<pBest_infeasablity) {
+        if (infeasiblity<pBest_infeasiblity) {
           pBest=x;
           pBest_cost=cost;
-          pBest_infeasablity=infeasablity;
-        } else if (infeasablity==pBest_infeasablity){
+          pBest_infeasiblity=infeasiblity;
+        } else if (infeasiblity==pBest_infeasiblity){
           bool f = false;
           for (size_t i = 0; i < O; i++){
             if (cost[i]>pBest_cost[i]) return;
@@ -184,7 +184,7 @@ namespace mopso {
           if(f){
             pBest=x;
             pBest_cost=cost;
-            pBest_infeasablity=infeasablity;
+            pBest_infeasiblity=infeasiblity;
           }
         }
       }
@@ -197,14 +197,14 @@ namespace mopso {
         auto X = x;
         X[j]=rnd::unifrnd(lb,ub);
         auto [c,i] = problem(X);
-        if (i <= infeasablity){
+        if (i <= infeasiblity){
           bool f = false;
           for (size_t i = 0; i < O; i++){
             if (c[i]>cost[i]) {
               if (rnd::rand()<0.5){
                 x[j]=X[j];
                 cost = c;
-                infeasablity = i;
+                infeasiblity = i;
               }
               return;
             }
@@ -213,12 +213,12 @@ namespace mopso {
           if(f){
             x[j]=X[j];
             cost = c;
-            infeasablity = i;
+            infeasiblity = i;
           }
         } else if(rnd::rand()<0.5) {
           x[j]=X[j];
           cost = c;
-          infeasablity = i;
+          infeasiblity = i;
         }
       }
       vars<N> l;
@@ -226,10 +226,10 @@ namespace mopso {
       vars<N> x;
       vars<N> v;
       vars<O> cost;
-      double infeasablity;
+      double infeasiblity;
       vars<N> pBest;
       vars<O> pBest_cost;
-      double pBest_infeasablity;
+      double pBest_infeasiblity;
       bool is_dominated;
       ull grid_index;
       friend class Repository<N,O>;
