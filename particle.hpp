@@ -114,10 +114,15 @@ namespace mopso {
         else out << "no,";
         out << grid_index << '\n';
       }
-      template<template <typename... Args> class Container,typename... Types>
-      inline static void csv_out(std::ostream& out,Container<Types...>& swarm){
+      inline static void csv_out(std::ostream& out,std::vector<Particle>& swarm){
         swarm[0].csv_out(out,true);
         for (size_t i = 1; i < swarm.size(); i++)
+          swarm[i].csv_out(out,false);
+      }
+      template<ull T>
+      inline static void csv_out(std::ostream& out,std::array<Particle,T>& swarm){
+        swarm[0].csv_out(out,true);
+        for (size_t i = 1; i < T; i++)
           swarm[i].csv_out(out,false);
       }
       inline void update_grid_index(const GRD<O>& g){
