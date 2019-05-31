@@ -114,8 +114,8 @@ namespace mopso {
         else out << "no,";
         out << grid_index << '\n';
       }
-      template<typename T,template <typename, typename = std::allocator<T>> class Container>
-      inline static void csv_out(std::ostream& out,Container<T>& swarm){
+      template<template <typename... Args> class Container,typename... Types>
+      inline static void csv_out(std::ostream& out,Container<Types...>& swarm){
         swarm[0].csv_out(out,true);
         for (size_t i = 1; i < swarm.size(); i++)
           swarm[i].csv_out(out,false);
