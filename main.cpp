@@ -29,7 +29,7 @@ int main(){
   const mopso::ull max_iter{200};
   mopso::vars<Nvars> l{0,0,0,0};
   mopso::vars<Nvars> u{pi/2,pi/2,pi/2,pi/2};
-  auto [rep,swarm] = mopso::mopso<Nvars,Nobjs,Swarm_size,Rep_size>(l,u,cost_fcn<Nvars,Nobjs>,max_iter);
+  auto [rep,swarm] = mopso::mopso<Nvars,Nobjs,Swarm_size>(l,u,cost_fcn<Nvars,Nobjs>,max_iter,Rep_size);
   std::ofstream f("./repository.csv");
   rep.csv_out(f);
   f=std::ofstream ("./swarm.csv");
