@@ -33,7 +33,7 @@ int main(){
   std::ofstream f("./repository.csv");
   rep.csv_out(f);
   f=std::ofstream ("./swarm.csv");
-  mopso::Particle<Nvars,Nobjs,Swarm_size>::csv_out(f,swarm);
+  mopso::Particle<Nvars,Nobjs>::csv_out(f,swarm);
   rep.SelectLeader().info();
   return 0;
 }
