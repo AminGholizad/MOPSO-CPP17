@@ -47,6 +47,9 @@ namespace mopso {
           out << '\n';
         }
       }
+      inline void csv_out(std::ostream& out){
+        Particle<N,O,S>::csv_out(out,swarm);
+      }
     private:
       ull rep_size;
       std::vector<Particle<N,O,S>> swarm;
