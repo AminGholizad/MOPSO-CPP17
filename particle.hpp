@@ -10,9 +10,9 @@ namespace mopso {
   using vars=std::array<double,N>;
   template<ull N,ull O>
   using Problem=std::function<std::pair<vars<O>,double>(vars<N>)>;
-  template <ull N, ull O, ull S> class Repository;
+  template <ull N, ull O> class Repository;
   template<ull O> using GRD = std::array<std::vector<double>,O>;
-  template<ull N,ull O,ull S>
+  template<ull N,ull O>
   class Particle {
     public:
       inline Particle() = default;
@@ -48,12 +48,14 @@ namespace mopso {
         }
         return f;
       }
+      template <ull S>
       inline static Particle get_Best(const std::array<Particle,S>& swarm){
         return *std::min_element(swarm.begin(),swarm.end(),
                                 [](const auto& a,const auto& b){
                                   return a.dominates(b);
                                 });
       }
+      template <ull S>
       inline static void update_domination(std::array<Particle,S>& swarm){
         for (size_t i = 0; i < S; i++) {
           swarm[i].is_dominated=false;
@@ -230,7 +232,7 @@ namespace mopso {
       double pBest_infeasablity;
       bool is_dominated;
       ull grid_index;
-      friend class Repository<N,O,S>;
+      friend class Repository<N,O>;
   };
 } /* pso */
 #endif //PARTICLE_H
