@@ -6,7 +6,7 @@
 #include "rand.hpp"
 #include "particle.hpp"
 namespace mopso {
-  template <ull N, ull O, ull S>
+  template <ull N, ull O>
   class Repository {
     public:
       inline Repository() = default;
@@ -14,9 +14,10 @@ namespace mopso {
       inline Repository(Repository&&) = default;
       inline Repository& operator=(Repository const&) = default;
       inline Repository& operator=(Repository&&) = default;
-      inline Repository (std::array<Particle<N,O,S>,S> s,ull r,ull g,double a,double b,double ga)
+      template <ull S>
+      inline Repository (std::array<Particle<N,O>,S> s,ull r,ull g,double a,double b,double ga)
             :rep_size{r},grid_size{g},alpha{a},beta{b},gamma{ga}{
-              Particle<N,O,S>::update_domination(s);
+              Particle<N,O>::update_domination(s);
               for (size_t i = 0; i < S; i++)
                 if (!s[i].is_dominated)
                   swarm.push_back(s[i]);
@@ -24,12 +25,13 @@ namespace mopso {
               for (size_t i = 0; i < swarm.size(); i++)
                 swarm[i].update_grid_index(Grid);
             }
-      inline Particle<N,O,S> SelectLeader()const&{
+      inline Particle<N,O> SelectLeader()const&{
         size_t sm = select_index(-beta);
         return swarm[sm];
       }
-      inline void update(std::array<Particle<N,O,S>,S>& s){
-        Particle<N,O,S>::update_domination(s);
+      template <ull S>
+      inline void update(std::array<Particle<N,O>,S>& s){
+        Particle<N,O>::update_domination(s);
         for (size_t i = 0; i < S; i++)
           if (!s[i].is_dominated)
             swarm.push_back(s[i]);
@@ -48,11 +50,11 @@ namespace mopso {
         }
       }
       inline void csv_out(std::ostream& out){
-        Particle<N,O,S>::csv_out(out,swarm);
+        Particle<N,O>::csv_out(out,swarm);
       }
     private:
       ull rep_size;
-      std::vector<Particle<N,O,S>> swarm;
+      std::vector<Particle<N,O>> swarm;
       GRD<O> Grid;
       ull grid_size;
       double alpha;
