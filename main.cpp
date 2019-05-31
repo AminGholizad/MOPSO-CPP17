@@ -30,8 +30,10 @@ int main(){
   mopso::vars<Nvars> l{0,0,0,0};
   mopso::vars<Nvars> u{pi/2,pi/2,pi/2,pi/2};
   auto [rep,swarm] = mopso::mopso<Nvars,Nobjs,Swarm_size,Rep_size>(l,u,cost_fcn<Nvars,Nobjs>,max_iter);
-  std::ofstream f("./resualt.csv");
+  std::ofstream f("./repository.csv");
   rep.csv_out(f);
+  f=std::ofstream ("./swarm.csv");
+  mopso::Particle<Nvars,Nobjs,Swarm_size>::csv_out(f,swarm);
   rep.SelectLeader().info();
   return 0;
 }
